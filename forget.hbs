@@ -1,0 +1,31 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Forget Page</title>
+    <link rel="stylesheet" href="/forget.css">
+    <script>
+      function openButtonPage() { window.location.href = "/otp"; }
+    </script>
+  </head>
+  <body>
+    <div class="container">
+    {{!-- <img id="image-id" src="../imageSources/rm314-bb-18.png" alt="not found"> --}}
+    <form action="/otp" method="post">
+      <label for="email">Please enter your Gmail:</label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        placeholder="Gmail"
+        required
+      />
+      <button type="submit">Send Code</button>
+    </form>
+
+    <script>
+      const error = "{{error}}"; if (error) { alert(error); }
+    </script>
+    </div>
+  </body>
+</html>

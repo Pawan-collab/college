@@ -1,0 +1,35 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login Page</title>
+    <link rel="stylesheet" href="/login.css">
+    <script>
+      function goToSignup() { window.location.href = '/signup'; }
+    </script>
+    <script>
+      function goToForgot() { window.location.href = '/forget'; }
+    </script>
+  </head>
+  <body>
+    <img id="image-id" src="../imageSources/rm314-bb-18.png" alt="not found">
+    <div class="container">
+    <h1>Login Page</h1>
+    <form action="/login" method="post">
+      <label for="name">please enter the username</label>
+      <input type="name" name="name" placeholder="Name" />
+      <label for="password">please enter the password</label>
+      <input type="password" name="password" placeholder="Password" />
+      <input class="login" type="submit" value="Login" />
+    </form>
+    <button class="forget-button" onclick="goToForgot()">Forgot Password</button>
+    <button class="signup" onclick="goToSignup()">Signup</button>
+    <script>
+      const error = "{{error}}"; if (error && error !== '') { alert(error); }
+      const success = "{{success}}"; if (success && success !== '') {
+      alert(success); }
+    </script>
+    {{!-- <a class="google-login" href="/google/google">Login with Gmail</a> --}}
+  </div>
+  </body>
+</html>

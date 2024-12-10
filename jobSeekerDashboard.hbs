@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Seeker Dashboard</title>
+    <link rel="stylesheet" href="/jobseeker.css">
+</head>
+<body>
+  <div class="maindiv">
+   <nav>
+        <ul>
+        <!-- Link to View Profile -->
+          <li><a href="/job/jobSeeker/profile" class="view-profile-link">View Profile</a></li>
+            <li><a href="/job/jobSeeker/jobs" class="view-profile-link">View Jobs</a></li>
+            <li><a href="/job//application" class="view-profile-link">View Applications</a></li>
+        <li><a href="/logout">Logout</a></li>
+        </ul>
+        </nav>
+
+       
+    <div class="container">
+       
+          <h1>Welcome to Job Seeker Dashboard</h1>
+        <!-- Profile Information Section (displayed after clicking View Profile) -->
+        {{#if user.name}}
+        <div class="profile-section">
+            <h2>Profile Information</h2>
+            <table class="profile-table">
+                <tr>
+                    <th>Name</th>
+                    <td>{{user.name}}</td>
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <td>{{user.email}}</td>
+                </tr>
+                {{#if user.resume}}
+                <tr>
+                    <th>Resume</th>
+                    <td><a href="{{user.resume}}" target="_blank">View Resume</a></td>
+                </tr>
+                {{/if}}
+                {{#if user.coverLetter}}
+                <tr>
+                    <th>Cover Letter</th>
+                    <td>{{user.coverLetter}}</td>
+                </tr>
+                {{/if}}
+            </table>
+        </div>
+        {{/if}}
+
+        <!-- Form to Update Profile with Resume and Cover Letter -->
+        {{#if user}}
+        <div class="update-profile-section">
+            <h2>Update Profile</h2>
+<form id="updateProfileForm" method="POST" action="/job/jobSeeker/update" enctype="multipart/form-data">
+                <div class="form-group">
+        <label for="resume">Resume:</label>
+        <input type="file" id="resume" name="resume" accept=".pdf,.doc,.docx" />
+    </div>
+
+                <div class="form-group">
+                    <label for="coverLetter">Cover Letter:</label>
+                    <textarea id="coverLetter" name="coverLetter" rows="5">{{user.coverLetter}}</textarea>
+                </div>
+
+                <button type="submit" class="btn-submit">Update Profile</button>
+            </form>
+        </div>
+        {{/if}}
+        
+         <!-- Job Listing Section -->
+        <h2>Available Jobs</h2>
+        <table class="jobs-table">
+  <thead>
+    <tr>
+      <th>Job Title</th>
+      <th>Company Name</th>
+      <th>Description</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each jobs}}
+    <tr>
+      <td>{{this.title}}</td>
+      <td>{{this.company_id.name}}</td>
+      <td>{{this.description}}</td>
+      <td>
+        <!-- Form to apply for the job with job ID -->
+        <form action="/job/{{this._id}}/apply" method="POST" enctype="multipart/form-data">
+  <div>
+    <label for="resume">Resume:</label>
+    <input type="file" id="resume" name="resume" accept=".pdf,.doc,.docx" required />
+  </div>
+  <div>
+    <label for="coverLetter">Cover Letter:</label>
+    <textarea name="coverLetter" id="coverLetter" rows="3" required></textarea>
+  </div>
+  <button type="submit">Apply</button>
+</form>
+      </td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
+
+
+<h2>My Applications</h2>
+<table class="applications-table">
+  <thead>
+    <tr>
+      <th>Job Title</th>
+      <th>Description</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each applications}}
+<tr>
+  <td>{{this.job_id.title}}</td>
+  <td>{{this.job_id.description}}</td>
+  {{#if this.status}}
+    <td>{{this.status}}</td>
+  {{else}}
+    <td>Pending</td>
+  {{/if}}
+</tr>
+{{/each}}
+  </tbody>
+</table>
+    </div>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SignUp Page</title>
+  <link rel="stylesheet" href="/signup.css">
+</head>
+<body>
+  <div class="container">
+  <h1>SignUp Page</h1>
+  <form action="/signup" method="post" enctype="multipart/form-data">
+    <label for="name">Please enter the user name:</label>
+    <input type="name" name="name" placeholder="Name" required />
+
+    <label for="password">Please enter the password:</label>
+    <input type="password" name="password" placeholder="Password" required />
+
+    <label for="email">Please enter your Gmail:</label>
+    <input type="email" name="email" placeholder="Gmail" required />
+
+    <label for="categories">Select your role:</label>
+    <div id="roleButtons">
+      {{!-- <button type="button" class="role-btn" data-role="Admin">Admin</button> --}}
+      <button type="button" class="role-btn" data-role="Company">Company</button>
+      <button type="button" class="role-btn" data-role="Job-Seeker" onclick="">Job Seeker</button>
+    </div>
+    <input type="hidden" id="categories" name="categories" required />
+
+    <!-- Company-specific fields -->
+    <div id="companyFields" style="display: none;">
+      <h3>Company Details</h3>
+      <label for="location">Location:</label>
+      <input type="text" name="location" placeholder="Location" />
+
+      <label for="document">Company Document:</label>
+      <input type="file" name="document" accept=".pdf,.doc,.docx" />
+    </div>
+
+    <!-- Job-Seeker-specific fields -->
+    <div id="jobSeekerFields" style="display: none;">
+      <h3>Job Seeker Details</h3>
+      <label for="resume">Upload Resume:</label>
+      <input type="file" name="resume" accept=".pdf,.doc,.docx" required />
+
+      <label for="coverLetter">Cover Letter:</label>
+      <textarea name="coverLetter" placeholder="Cover Letter"></textarea>
+    </div>
+
+    <input type="submit" value="Sign Up" />
+  </form>
+  </div>
+
+  <script>
+    // Function to toggle fields based on selected category
+    function toggleFields(selectedRole) {
+      const companyFields = document.getElementById("companyFields");
+      const jobSeekerFields = document.getElementById("jobSeekerFields");
+      const documentField = document.querySelector('input[name="document"]');
+      const resumeField = document.querySelector('input[name="resume"]');
+      const categoryInput = document.getElementById("categories");
+
+      // Set the selected category in the hidden input field
+      categoryInput.value = selectedRole;
+
+      // Show/hide fields based on the selected role
+      companyFields.style.display = selectedRole === "Company" ? "block" : "none";
+      jobSeekerFields.style.display = selectedRole === "Job-Seeker" ? "block" : "none";
+
+      // Set or remove "required" attribute for document and resume fields
+      if (selectedRole === "Company") {
+        documentField.setAttribute("required", "required");
+        resumeField.removeAttribute("required");
+      } else if (selectedRole === "Job-Seeker") {
+        resumeField.setAttribute("required", "required");
+        documentField.removeAttribute("required");
+      } else {
+        // If "Admin" is selected
+        documentField.removeAttribute("required");
+        resumeField.removeAttribute("required");
+      }
+    }
+
+    // Add event listeners to role buttons
+    document.querySelectorAll(".role-btn").forEach(button => {
+      button.addEventListener("click", () => {
+        const selectedRole = button.getAttribute("data-role");
+        toggleFields(selectedRole);
+      });
+    });
+
+    // Display any error or success messages
+    const error = "{{error}}";
+    if (error && error !== "") {
+      alert(error);
+    }
+    const success = "{{success}}";
+    if (success && success !== "") {
+      alert(success);
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 1000);
+    }
+  </script>
+</body>
+</html>

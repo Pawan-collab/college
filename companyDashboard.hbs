@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Company Dashboard</title>
+  <link rel="stylesheet" href="/companyDash.css">
+</head>
+<body>
+  <div class="maindiv">
+
+  <header>
+    <h1>Company Dashboard</h1>
+    <nav>
+      <ul>
+        <li><a class="a-tag" href="/company-dashboard">Dashboard Home</a></li>
+        {{!-- <li><a href="/jobs/read">Total Jobs</a></li> --}}
+        <li><a class="a-tag" href="/company-dashboard/job-seekers">View Registered Job Seekers</a></li>
+        <li><a class="a-tag" id="logout" href="/logout">Logout</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <!-- this is Create Job Section -->
+    <section id="create-job">
+      <h2>Create a New Job</h2>
+      <form action="/jobs/create" method="POST">
+        <div>
+          <label for="title">Job Title</label>
+          <input type="text" id="title" name="title" required>
+        </div>
+        <div>
+          <label for="description">Job Description</label>
+          <textarea id="description" name="description" required></textarea>
+        </div>
+        <div>
+          <label for="category">Category</label>
+          <input type="text" id="category" name="category" required>
+        </div>
+        <button type="submit">Create Job</button>
+      </form>
+    </section>
+
+<!-- This is diisplay Jobs Section -->
+<section id="job-list">
+  <h2>Your Jobs</h2>
+  {{#if jobs.length}}
+    <table>
+      <thead>
+        <tr>
+          <th>Job Title</th>
+          <th>Description</th>
+          <th>Category</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each jobs}}
+          <tr>
+            <td>{{this.title}}</td>
+            <td>{{this.description}}</td>
+            <td>{{this.category}}</td>
+            <td>
+              <button onclick="showEditForm('{{this._id}}')">Edit</button> 
+              <form action="/jobs/{{this._id}}/delete?_method=DELETE" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this job?');">
+                <input type="hidden" name="_method" value="DELETE">
+                <button type="submit">Delete</button>
+              </form>
+            </td>
+          </tr>
+
+
+          <!-- this is hiidden Edit Form -->
+          <tr id="edit-form-{{this._id}}" style="display: none;">
+            <td colspan="4">
+              <form action="/jobs/{{this._id}}/update?_method=PUT" method="POST">
+                <input type="hidden" name="_method" value="PUT">
+                
+                <label for="title">Job Title</label>
+                <input type="text" name="title" value="{{this.title}}" required>
+                
+                <label for="description">Job Description</label>
+                <textarea name="description" required>{{this.description}}</textarea>
+                
+                <label for="category">Category</label>
+                <input type="text" name="category" value="{{this.category}}" required>
+                
+                <button type="submit">Update Job</button>
+                <button type="button" onclick="hideEditForm('{{this._id}}')">Cancel</button>
+                <button type="button" onclick="clearEditForm('{{this._id}}')">Clear</button>
+              </form>
+            </td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  {{else}}
+    <p>No jobs posted yet.</p>
+  {{/if}}
+
+
+  {{#if jobSeekers}}
+  <h2>Registered Job Seekers</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Full Name</th>
+        <th>Email</th>
+        <th>Job ID</th>
+        <th>Resume</th>
+        <th>Cover Letter</th>
+        <th>Status</th>
+        <th>Applied Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each jobSeekers}}
+        {{#each applications}} <!-- Loop through applications for each job seeker -->
+          <tr>
+            <td>{{../name}}</td>
+            <td>{{../email}}</td>
+            <td>
+              {{#if this.job_id}}
+                {{#if this.job_id.title}}
+                  {{this.job_id.title}}
+                {{else}}
+                  {{this.job_id._id}} <!-- Display job_id if title is not present -->
+                {{/if}}
+              {{else}}
+                {{this.user_id}} <!-- Display user_id if job_id is not present -->
+              {{/if}}
+            </td>
+            <td><a href="/public/{{this.resume}}" target="_blank">View Resume</a></td>
+            <td>{{this.coverLetter}}</td>
+            <td>{{this.status}}</td>
+            <td>{{this.appliedDate}}</td>
+          </tr>
+        {{/each}}
+      {{/each}}
+    </tbody>
+  </table>
+{{else}}
+  <p>No registered job seekers found.</p>
+{{/if}}
+
+
+</section>
+
+
+  </main>
+
+  <footer>
+    <p>&copy; 2024 Next Step Workforce Solutions</p>
+  </footer>
+  </div>
+  <script>
+    document.querySelector("#create-job form").addEventListener("submit", async (event) => {
+      event.preventDefault(); 
+      const formData = new FormData(event.target);
+      const data = Object.fromEntries(formData);
+
+      try {
+        const response = await fetch("/jobs/create", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+
+        const result = await response.json();
+        console.log("Response data:", result); 
+
+        if (response.ok) {
+          alert(result.message || "Job created successfully!"); 
+          event.target.reset(); 
+        } else {
+          alert(result.message || "An error occurred while creating the job.");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        alert("Failed to create job. Please try again.");
+      }
+    });
+
+
+    function showEditForm(id) {
+    document.getElementById(`edit-form-${id}`).style.display = 'table-row';
+  }
+
+  function hideEditForm(id) {
+    document.getElementById(`edit-form-${id}`).style.display = 'none';
+  }
+
+  function clearEditForm(jobId) {
+    const form = document.querySelector(`#edit-form-${jobId} form`);
+    if (form) {
+      form.querySelectorAll('input[type="text"], textarea').forEach((input) => input.value = '');
+    }
+  }
+
+
+  </script>
+
+
+</body>
+</html>

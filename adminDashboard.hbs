@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/dashboard.css">
+</head>
+<body>
+    <div class="container">
+        
+        <nav>
+            <ul>
+              <h1>Admin Dashboard</h1>
+              <li><a href="/admin-dashboard/companies">
+               <span>
+
+               Registered Companies
+               </span> 
+                <svg fill="#fff" height="16px" width="16px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 330.002 330.002" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path id="XMLID_103_" d="M233.252,155.997L120.752,6.001c-4.972-6.628-14.372-7.97-21-3c-6.628,4.971-7.971,14.373-3,21 l105.75,140.997L96.752,306.001c-4.971,6.627-3.627,16.03,3,21c2.698,2.024,5.856,3.001,8.988,3.001 c4.561,0,9.065-2.072,12.012-6.001l112.5-150.004C237.252,168.664,237.252,161.33,233.252,155.997z"></path> </g></svg> 
+                
+                </a>
+                </li>
+                <li><a href="/admin-dashboard/job-seekers">
+               <span>
+
+       Registered Job Seekers
+               </span> 
+                <svg fill="#fff" height="16px" width="16px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 330.002 330.002" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path id="XMLID_103_" d="M233.252,155.997L120.752,6.001c-4.972-6.628-14.372-7.97-21-3c-6.628,4.971-7.971,14.373-3,21 l105.75,140.997L96.752,306.001c-4.971,6.627-3.627,16.03,3,21c2.698,2.024,5.856,3.001,8.988,3.001 c4.561,0,9.065-2.072,12.012-6.001l112.5-150.004C237.252,168.664,237.252,161.33,233.252,155.997z"></path> </g></svg> 
+                
+                </a>
+                </li>
+                <li><a href="/admin-dashboard/jobs">
+               <span>
+
+    Manage Jobs
+               </span> 
+                <svg fill="#fff" height="16px" width="16px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 330.002 330.002" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path id="XMLID_103_" d="M233.252,155.997L120.752,6.001c-4.972-6.628-14.372-7.97-21-3c-6.628,4.971-7.971,14.373-3,21 l105.75,140.997L96.752,306.001c-4.971,6.627-3.627,16.03,3,21c2.698,2.024,5.856,3.001,8.988,3.001 c4.561,0,9.065-2.072,12.012-6.001l112.5-150.004C237.252,168.664,237.252,161.33,233.252,155.997z"></path> </g></svg> 
+                
+                </a>
+                </li>
+                <li><a href="/admin-dashboard/applications">
+               <span>
+
+       View Applications
+               </span> 
+                <svg fill="#fff" height="16px" width="16px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 330.002 330.002" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path id="XMLID_103_" d="M233.252,155.997L120.752,6.001c-4.972-6.628-14.372-7.97-21-3c-6.628,4.971-7.971,14.373-3,21 l105.75,140.997L96.752,306.001c-4.971,6.627-3.627,16.03,3,21c2.698,2.024,5.856,3.001,8.988,3.001 c4.561,0,9.065-2.072,12.012-6.001l112.5-150.004C237.252,168.664,237.252,161.33,233.252,155.997z"></path> </g></svg> 
+                
+                </a>
+                </li>
+               
+               
+            </ul>
+
+            
+
+
+
+             <a class="logoutButton"  href="/logout">Logout</a>
+
+        </nav>
+
+
+        <!-- Section for displaying content dynamically -->
+        <div id="content">
+       {{#if companies}}
+  <h2>Registered Companies</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Company Id</th>
+        <th>Company Name</th>
+        <th>Company Email</th>
+        <th>Company Documents</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each companies}}
+      <tr>
+        <td>{{this._id}}</td>
+        <td>{{this.name}}</td> 
+        <td>{{this.email}}</td> 
+        <td>
+          <ul>
+            {{#each this.documents}}
+              <li><a href="{{this}}" target="_blank">View Document</a></li>
+            {{/each}}
+          </ul>
+        </td>
+        <td>
+          <form action="/admin-dashboard/company/{{this._id}}/delete?_method=DELETE" method="POST">
+            <input type="hidden" name="_method" value="DELETE" />
+            <button type="submit">Delete</button>
+          </form>
+        </td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+{{else}}
+  {{!-- <p>No registered companies found.</p> --}}
+{{/if}}
+
+
+
+
+{{#if jobSeekers}}
+  <h2>Registered Job Seekers</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Full Name</th>
+        <th>Email</th>
+        <th>Job ID </th>
+        <th>Resume</th>
+        <th>Cover Letter</th>
+        <th>Status</th>
+        <th>Applied Date</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each jobSeekers}}
+        {{#each applications}} <!-- Loop through applications for each job seeker -->
+          <tr>
+            <td>{{../name}}</td>
+            <td>{{../email}}</td>
+            <td>
+              {{#if this.job_id}}
+                {{#if this.job_id.title}}
+                  {{this.job_id.title}}
+                {{else}}
+                  {{this.job_id._id}} <!-- Display job_id if title is not present -->
+                {{/if}}
+              {{else}}
+                {{this.user_id}} <!-- Display user_id if job_id is not present -->
+              {{/if}}
+            </td>
+            <td><a href="/public/{{this.resume}}" target="_blank">View Resume</a></td>
+            <td>{{this.coverLetter}}</td>
+            <td>{{this.status}}</td>
+            <td>{{this.appliedDate}}</td>
+            <td>
+              <form action="/admin-dashboard/job-seeker/{{../_id}}/delete?_method=DELETE" method="POST">
+                <input type="hidden" name="_method" value="DELETE" />
+                <button type="submit">Delete</button>
+              </form>
+            </td>
+          </tr>
+        {{/each}}
+      {{/each}}
+    </tbody>
+  </table>
+{{/if}}
+
+
+
+
+            {{#if jobs}}
+                <h2>Manage Jobs</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Job Title</th>
+                            <th>Company</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each jobs}}
+                        <tr>
+                            <td>{{this.title}}</td>
+                            <td>{{this.company_id.name}}</td>
+                            <td>
+                                {{!-- <a href="/job/{{this._id}}/edit">Edit</a> --}}
+                                <form action="/admin-dashboard/job/{{this._id}}/delete?_method=DELETE" method="POST">
+                                <input type="hidden" name="_method" value="DELETE" />
+                                    <button type="submit">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            {{/if}}
+            
+<!-- Applications Table -->
+{{#if applications}}
+  <h2>Job Applications</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Applicant Name</th>
+        <th>Job Title</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each applications}}
+        <tr>
+          <td>{{this.user_id.name}}</td> <!-- Applicant Name -->
+          <td>{{#if this.job_id}}{{this.job_id.title}}{{else}}N/A{{/if}}</td> <!-- Job Title with fallback -->
+          <td>{{this.status}}</td> <!-- Status -->
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+{{/if}}
+
+
+        </div>
+    </div>
+</body>
+</html>
